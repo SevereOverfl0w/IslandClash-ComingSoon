@@ -4,7 +4,6 @@ var gulp = require('gulp'),
     reload = browserSync.reload,
     wiredep = require('wiredep').stream,
     lazypipe = require('lazypipe'),
-    pngcrush = require('imagemin-pngcrush'),
     runSequence = require('run-sequence'),
     args  = require('yargs').argv,
     folders = {
@@ -106,7 +105,7 @@ gulp.task('image', function() {
                .pipe($.if(isBuild, $.imagemin({
                 progressive: true,
                 svgoPlugins: [{removeViewBox: false}],
-                use: [pngcrush()]
+                pngquant: true,
                })))
                .pipe($.if(isBuild, gulp.dest(folders.dist)))
 });
@@ -137,6 +136,6 @@ gulp.task('build', function(cb) {
 });
 
 gulp.task('deploy', ['build'], function(){
-  return gulp.src(config.dist + '/**/*')
-             .pipe($.gh-pages())
+  return gulp.src(folders.dist + '/**/*')
+             .pipe($.ghPages())
 });
