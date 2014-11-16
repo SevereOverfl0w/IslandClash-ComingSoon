@@ -15,9 +15,9 @@ var gulp = require('gulp'),
     globs = {
         templates: folders.app + '/*.{jade,html}',
         javascript: folders.app + '/**/*.js',
-        
+
         coffee: folders.app + '/**/*.coffee',
-        
+
         styles: folders.app + '/**/*.{less,css}',
         image: folders.app + '/**/*.{png,jpeg,jpg,gif,svg}'
     },
@@ -43,9 +43,9 @@ gulp.task('templates', function() {
                  });
     return gulp.src(globs.templates)
                .pipe($.plumber())
-               
+
                .pipe($.if('*.jade', $.jade({pretty: true}))) // Useref reads files line-by-line: jonkemp/gulp-useref#29
-               
+
                .pipe($.if(isDev, gulp.dest(folders.tmp)))
                .pipe($.if(isDev, reload({stream: true})))
                .pipe($.if(isBuild, assets))
@@ -83,10 +83,10 @@ gulp.task('coffee', function() {
 gulp.task('styles', function() {
     return gulp.src(globs.styles)
                .pipe($.plumber())
-               
+
                .pipe($.ignore.exclude('**/_*.less'))
                .pipe($.if('*.less', $.less()))
-               
+
                .pipe($.autoprefixer())
                .pipe(gulp.dest(folders.tmp)) // Solve issue #2
                .pipe($.if(isDev, reload({stream: true})));
@@ -134,4 +134,9 @@ gulp.task('default', ['wiredep', 'styles', 'coffee', 'javascript', 'templates', 
 gulp.task('build', function(cb) {
     isBuild = true; isDev = false;
     runSequence(['coffee', 'styles'], ['wiredep', 'javascript', 'templates', 'image'], cb);
+});
+
+gulp.task('deploy', ['build'], function(){
+  return gulp.src(config.dist + '/**/*')
+             .pipe($.gh-pages())
 });
