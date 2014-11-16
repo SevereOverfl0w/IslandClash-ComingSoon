@@ -1,0 +1,25 @@
+{
+  "name": "milkshake",
+  "version": "0.0.0",
+  "authors": [
+    "SevereOverfl0w <overfl0w@narna.co>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "plax": "~1.4.1",
+    "animate.css": "~3.2.0",
+    "zocial": "*"
+  },
+  "overrides": {
+      "zocial": {
+          "main": "css/zocial.css"
+      }
+  }
+}
